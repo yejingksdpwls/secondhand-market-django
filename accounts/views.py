@@ -27,8 +27,7 @@ def login(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            next_url = request.GET.get("next") or "main"
-            return redirect(next_url)
+            return redirect(request.META.get("HTTP_REFERER", "main"))
     else:
         form = AuthenticationForm()
     context = {"form": form}
@@ -60,8 +59,7 @@ def update(request):
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            next_url = request.GET.get("next") or "main"
-            return redirect(next_url)
+            return redirect(request.META.get("HTTP_REFERER", "main"))
     else:
         form = CustomUserChangeForm(request.POST)
     context = {"form":form}
@@ -76,8 +74,7 @@ def password(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            next_url = request.GET.get("next") or "main"
-            return redirect(next_url)
+            return redirect(request.META.get("HTTP_REFERER", "main"))
     else:
         form = PasswordChangeForm(request.user)
     context = {"form":form}
@@ -93,8 +90,7 @@ def follow(request, pk):
                 user.followers.remove(request.user)
             else:
                 user.followers.add(request.user)
-        next_url = request.GET.get("next") or "main"
-        return redirect(next_url)
+        return redirect(request.META.get("HTTP_REFERER", "main"))
     return redirect("accounts:login")
 
 
