@@ -5,6 +5,10 @@
 <h2>{{ user.username }}</h2>
 <form action="{% url "accounts:follow" user.pk %}" method="POST">
     {% csrf_token %}
-    <input type="submit" value="팔로우">
+    {% if request.user in user.following.all %}
+        <input type="submit" value="언팔로우">
+    {% else %}
+        <input type="submit" value="언팔로우">
+    {% endif %}
 </form>
 {% endblock  %}
