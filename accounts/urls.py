@@ -9,6 +9,6 @@ urlpatterns = [
     path("delete/", views.delete, name="delete"),
     path("update/", views.update, name="update"),
     path("password/", views.password, name="password"),
-    path("<ink:pk>/follow/", views.follow, name="follow"),
-    path("<ink:pk>/profile/", views.profile, name="profile"),
+    path("<int:pk>/follow/", views.follow, name="follow"),
+    path("<int:pk>/profile/", views.profile, name="profile"),
 ]
