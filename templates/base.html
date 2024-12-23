@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>스파르타 중고시장</title>
+
+</head>
+
+<body>
+    <div class="navbar">
+
+        {% if  request.user.is_authenticated %}
+            <form action="{% url 'accounts:logout' %}" method="POST">
+            {% csrf_token %}
+            <input type='submit' value='로그아웃'></input>
+            </form>
+            <form action="{% url 'accounts:delete' %}" method="POST">
+            {% csrf_token %}
+            <input type='submit' value='회원탈퇴'></input>
+            </form>
+            <form action="{% url 'accounts:update' %}" method="POST">
+            {% csrf_token %}
+            <input type='submit' value='정보수정'></input>
+            </form>
+
+        {% else %}
+            <form action="{% url 'accounts:login' %}" method="POST">
+            {% csrf_token %}
+            <input type='submit' value='로그인'></input>
+            </form>
+            <form action="{% url 'accounts:signup' %}" method="POST">
+            {% csrf_token %}
+            <input type='submit' value='회원가입'></input>
+            </form>
+        {% endif %}
+
+    </div>
+
+    <div class="container">
+        {% block content %}
+        {% endblock content %}
+    <div>
+</body>
+
+</html>
