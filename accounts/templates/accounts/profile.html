@@ -3,7 +3,7 @@
 {% block content %}
 <h1>프로필</h1>
 <h2>{{ user.username }}</h2>
-<form action="{% url "accounts:follow" %}" method="POST">
+<form action="{% url "accounts:follow" user.pk %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="팔로우">
 </form>
