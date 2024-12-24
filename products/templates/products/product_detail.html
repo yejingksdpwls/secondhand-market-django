@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
-
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
 {% block content %}
 <h1>{{ product.title }}</h1>
-<p>작성자 : {{ product.author }} | 작성 일자 : {{ product.created_at }} | 수정 일자 : {{ product.updated_at }}</p>
-{% if article.image %}
-<img src="{{ product.image.url }}">
+<p>작성자 : {{ product.author }} | 작성 일자 : {{ product.created_at }} | 수정 일자 : {{ product.updated_at }} | 조회수 : {{ product.see_count }}</p>
+{% if product.image %}
+<img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
 {% endif %}
 <p>₩ {{ product.price }}</p>
 <p>{{ product.content }}</p>
@@ -17,6 +20,8 @@
         <input type="submit" value="찜하기">
     {% endif %}
 </form>
+
+<span>{{ product.like_user.count }}명이 찜했어요</span>
 
 <hr>
 

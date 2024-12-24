@@ -18,7 +18,13 @@ def products(request):
 
 def product_detail(request, pk):
     product = Product.objects.get(pk=pk)
-    context = {"product":product}
+    if request.GET.get("redirected") != "true" and request.user != product.author:
+        product.see_count += 1
+        product.save()
+    total_likes = product.like_user.count()
+    context = {
+        "product":product,
+        "total_likes":total_likes}
     return render(request, "products/product_detail.html", context)
 
 
@@ -31,7 +37,7 @@ def create(request):
                 product = form.save(commit=False)
                 product.author = request.user
                 product.save()
-                return redirect("products:product_detail", product.pk)
+                return redirect(f"/products/{product.pk}/?redirected=true")
         else:
             form = ProductForm()
             context = {"form":form}
@@ -48,7 +54,7 @@ def update(request, pk):
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             product = form.save()
-            return redirect("products:product_detail", product.pk)
+            return redirect(f"/products/{product.pk}/?redirected=true")
     else:
         form = ProductForm(instance=product)
     context = {"product":product}
@@ -76,6 +82,6 @@ def like(request, pk):
                 product.like_user.add(request.user)
         else:
             messages.error(request, "본인의 물품은 찜할 수 없습니다.")
-        return redirect("products:product_detail", pk)
+        return redirect(f"/products/{product.pk}/?redirected=true")
     else:
         return redirect("accounts:login")
