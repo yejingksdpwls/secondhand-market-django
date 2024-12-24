@@ -20,7 +20,7 @@ from products import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-app_name = "market"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("main/", views.main, name = "main"),

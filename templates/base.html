@@ -26,6 +26,9 @@
             {% csrf_token %}
             <input type='submit' value='정보수정'></input>
             </form>
+            <a href="{% url "accounts:profile" request.user.pk %}">
+                <button>프로필보기</button>
+            </a>
 
         {% else %}
             <form action="{% url 'accounts:login' %}" method="POST">

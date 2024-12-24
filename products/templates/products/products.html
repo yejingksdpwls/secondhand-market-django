@@ -2,6 +2,9 @@
 {% block head %}{% endblock %}
 {% block content %}
 <h1>중고 물품 목록</h1>
+<a href="{% url "main" %}">
+    <button>팔로잉 글 보기</button>
+</a>
 <a href="{% url "products:create" %}">
     <button>물품 등록하기</button>
 </a>

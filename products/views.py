@@ -2,13 +2,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from products.models import Product
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_http_methods
 from products.forms import ProductForm
 from django.db.models import Count
 
 # Create your views here.
 def main(request):
-    return render(request, "products/main.html")
+    user = request.user
+    products = Product.objects.filter(
+        author__in=user.following.all()).order_by('-created_at')
+    context = {"products":products}
+    return render(request, "products/main.html",context)
 
 
 def products(request):
@@ -36,9 +41,11 @@ def product_detail(request, pk):
         product.see_count += 1
         product.save()
     total_likes = product.like_user.count()
+    user = get_object_or_404(get_user_model(), pk=product.author_id)
     context = {
         "product":product,
-        "total_likes":total_likes}
+        "total_likes":total_likes,
+        "user":user,}
     return render(request, "products/product_detail.html", context)
 
 
