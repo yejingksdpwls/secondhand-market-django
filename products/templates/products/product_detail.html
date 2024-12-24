@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
+{% block content %}
+<h1>{{ product.title }}</h1>
+<p>작성자 : <a href="{% url 'accounts:profile' product.author_id %}">{{ product.author }}</a></p>
+{% if request.user != product.author %}
+    <form action="{% url "accounts:follow" user.pk %}" method="POST">
+        {% csrf_token %}
+        {% if request.user in user.followers.all %}
+            <input type="submit" value="언팔로우">
+        {% else %}
+            <input type="submit" value="팔로우">
+        {% endif %}
+    </form>
+{% endif %}
+<p>작성 일자 : {{ product.created_at }} | 수정 일자 : {{ product.updated_at }} | 조회수 : {{ product.see_count }}</p>
+<img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+<p>₩ {{ product.price }}</p>
+<p>{{ product.content }}</p>
+
+<form action="{% url 'products:like' product.pk %}" method="POST">
+    {% csrf_token %}
+    {% if request.user in product.like_user.all %}
+        <input type="submit" value="찜 취소하기">
+    {% else %}
+        <input type="submit" value="찜하기">
+    {% endif %}
+</form>
+
+<span>{{ product.like_user.count }}명이 찜했어요</span>
+
+<hr>
+
+{% if product.author == request.user %}
+<form action="{% url 'products:update' product.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="수정">
+</form><br>
+<form action="{% url 'products:delete' product.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="삭제">
+</form><br>
+{% endif %}
+
+
+<a href="{% url 'products:products' %}">
+    <button>목록으로</button>
+</a>
+
+{% endblock  %}
+
