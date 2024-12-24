@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from products.forms import ProductForm
+from django.db.models import Count
 
 # Create your views here.
 def main(request):
@@ -11,8 +12,21 @@ def main(request):
 
 
 def products(request):
-    products = Product.objects.all().order_by("-created_at")
-    context = {"products":products}
+    sort_by = request.GET.get('sort_by', 'date_desc')  # 기본값 'date_desc'
+
+    if sort_by == 'popularity':
+        products = Product.objects.annotate(
+            like_count=Count('like_user')).order_by('-like_count')
+    elif sort_by == 'newest':
+        products = Product.objects.all().order_by('-created_at')
+    elif sort_by == 'priceAsc':
+        products = Product.objects.all().order_by('price')
+    elif sort_by == 'priceDesc':
+        products = Product.objects.all().order_by('-price')
+    else:
+        products = Product.objects.all()
+
+    context = {"products": products, 'sort_by': sort_by}
     return render(request, "products/products.html", context)
 
 
