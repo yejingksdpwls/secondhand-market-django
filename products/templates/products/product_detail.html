@@ -5,10 +5,19 @@
 {% endblock %}
 {% block content %}
 <h1>{{ product.title }}</h1>
-<p>작성자 : {{ product.author }} | 작성 일자 : {{ product.created_at }} | 수정 일자 : {{ product.updated_at }} | 조회수 : {{ product.see_count }}</p>
-{% if product.image %}
-<img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+<p>작성자 : <a href="{% url 'accounts:profile' product.author_id %}">{{ product.author }}</a></p>
+{% if request.user != product.author %}
+    <form action="{% url "accounts:follow" user.pk %}" method="POST">
+        {% csrf_token %}
+        {% if request.user in user.followers.all %}
+            <input type="submit" value="언팔로우">
+        {% else %}
+            <input type="submit" value="팔로우">
+        {% endif %}
+    </form>
 {% endif %}
+<p>작성 일자 : {{ product.created_at }} | 수정 일자 : {{ product.updated_at }} | 조회수 : {{ product.see_count }}</p>
+<img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
 <p>₩ {{ product.price }}</p>
 <p>{{ product.content }}</p>
 
