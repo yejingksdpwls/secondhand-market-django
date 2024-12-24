@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_http_methods
 from products.forms import ProductForm
-from django.db.models import Count
+from django.db.models import Count, Q
+from django.utils.safestring import mark_safe
 
 # Create your views here.
 def main(request):
@@ -106,3 +107,24 @@ def like(request, pk):
         return redirect(f"/products/{product.pk}/?redirected=true")
     else:
         return redirect("accounts:login")
+
+
+def search(request):
+    query = request.GET.get('q')
+    results = Product.objects.all()
+
+    if query:
+        results = Product.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(author__username__icontains=query)
+        )
+        for product in results:
+            product.title = mark_safe(
+                product.title.replace(query, f"<mark>{query}</mark>"))
+            product.content = mark_safe(
+                product.content.replace(query, f"<mark>{query}</mark>"))
+            
+    context = {'query': query, 'results': results}
+
+    return render(request, 'products/search.html', context)
