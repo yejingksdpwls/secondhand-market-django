@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block head %}{% endblock %}
+{% block content %}
+<h1>중고 물품 목록</h1>
+<a href="{% url "main" %}">
+    <button>팔로잉 글 보기</button>
+</a>
+<a href="{% url "products:create" %}">
+    <button>물품 등록하기</button>
+</a>
+<form method="GET">
+    <select name="sort_by" id="sort_by" onchange="this.form.submit()">
+        <option value="popularity" {% if request.GET.sort_by == 'popularity' %}selected{% endif %}>인기도순</option>
+        <option value="newest" {% if request.GET.sort_by == 'newest' %}selected{% endif %}>최신순</option>
+        <option value="priceAsc" {% if request.GET.sort_by == 'priceAsc' %}selected{% endif %}>가격 낮은순</option>
+        <option value="priceDesc" {% if request.GET.sort_by == 'priceDesc' %}selected{% endif %}>가격 높은순</option>
+    </select>
+</form>
+{% for product in products %}
+    <a href="{% url "products:product_detail" product.pk %}">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px;">
+            <span>{{ product.title }} | 가격 : {{ product.price }}원</span>
+            <span>작성자 : {{ product.author }}</span>
+        </div>
+    </a>
+    <hr>
+{% endfor %}
+
+{% endblock %}

@@ -1,14 +1,52 @@
 {% extends 'base.html' %}
-
+{% block head %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
 {% block content %}
 <h1>프로필</h1>
+<img src="{{ user.image.url }}" alt="{{ user.name }}" class="user-image">
+{% if request.user == user %}
+    <a href="{% url "accounts:profile_update" user.pk %}">
+        <button>프로필 사진 변경</button>
+    </a>
+{% else %}
+    <form action="{% url "accounts:follow" user.pk %}" method="POST">
+        {% csrf_token %}
+        {% if request.user in user.followers.all %}
+            <input type="submit" value="언팔로우">
+        {% else %}
+            <input type="submit" value="팔로우">
+        {% endif %}
+    </form>
+{% endif %}
 <h2>{{ user.username }}</h2>
-<form action="{% url "accounts:follow" user.pk %}" method="POST">
-    {% csrf_token %}
-    {% if request.user in user.followers.all %}
-        <input type="submit" value="언팔로우">
-    {% else %}
-        <input type="submit" value="팔로우">
-    {% endif %}
-</form>
+<p>가입일 : {{ user.date_joined }}</p>
+<p>팔로워 : {{ user.followers.count }} | 팔로잉 : {{ user.following.count }}</p>
+
+<h3>판매 물품</h3>
+{% for product in products %}
+    <a href="{% url "products:product_detail" product.pk %}">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px;">
+            <span>[{{ product.pk }}] 제목 : {{ product.title }} | 가격 : {{ product.price }}원</span>
+            <span>작성자 : {{ product.author }}</span>
+        </div>
+    </a>
+    <hr>
+{% endfor %}
+{% if request.user == user %}
+<h3>찜 목록</h3>
+    {% for product in liked_products %}
+        <a href="{% url "products:product_detail" product.pk %}">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px;">
+                <span>[{{ product.pk }}] 제목 : {{ product.title }} | 가격 : {{ product.price }}원</span>
+                <span>작성자 : {{ product.author }}</span>
+            </div>
+        </a>
+        <hr>
+    {% endfor %}
+{% endif %}
+<a href="{% url "products:products" %}">
+    <button>전체 글 보기</button>
+</a>
 {% endblock  %}

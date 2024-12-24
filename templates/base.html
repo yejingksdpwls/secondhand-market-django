@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {% block head %}
+        {% endblock head %}
     <title>스파르타 중고시장</title>
 
 </head>
@@ -24,6 +26,9 @@
             {% csrf_token %}
             <input type='submit' value='정보수정'></input>
             </form>
+            <a href="{% url "accounts:profile" request.user.pk %}">
+                <button>프로필보기</button>
+            </a>
 
         {% else %}
             <form action="{% url 'accounts:login' %}" method="POST">
@@ -35,6 +40,10 @@
             <input type='submit' value='회원가입'></input>
             </form>
         {% endif %}
+    <form method="get" action="{% url 'products:search' %}">
+    <input type="text" name="q" placeholder="검색어를 입력하세요" required>
+    <button type="submit">검색</button>
+    </form>
 
     </div>
 
