@@ -5,7 +5,9 @@
 
 ## 목차
 [ 1. 개요 ](#1-개요)
+
 [ 2. 개발 기간 ](#2-개발-기간)
+
 [ 3. 기능 ](#3-기능)
 
 ---
@@ -15,8 +17,8 @@
 회원 가입부터 상품 등록, 검색, 그리고 거래까지, 직관적인 UI와 강력한 기능을 제공합니다.
 
 #### 기술 스택
-Backend: <img src="https://img.shields.io/badge/DJANGO?style=for-the-badge&logo=Django&logoColor=#092E20">, <img src="https://img.shields.io/badge/PYTHON?style=for-the-badge&logo=Python&logoColor=#3776AB">
-Database: <img src="https://img.shields.io/badge/SQLITE?style=for-the-badge&logo=SQLite&logoColor=#003B57">
+Backend: <img src="https://img.shields.io/badge/DJango?style=for-the-badge&logo=Django&logoColor=#092E20">, <img src="https://img.shields.io/badge/Python?style=for-the-badge&logo=Python&logoColor=#3776AB">
+Database: <img src="https://img.shields.io/badge/SQLite?style=for-the-badge&logo=SQLite&logoColor=#003B57">
 
 ---
 
